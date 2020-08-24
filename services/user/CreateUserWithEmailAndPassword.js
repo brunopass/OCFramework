@@ -4,6 +4,7 @@ const verifyEmail = require("../email/verifyEmail")
 const setEmailTimeout = require("../email/setEmailTimeout")
 const { serverEncrypt } = require("../../libraries/security/aes256")
 const config = require("../../config")
+const verifyEmailTemplate = require("../../libraries/smtp/templates/verifyEmailTemplate")
 
 module.exports = CreateUserWithEmailAndPassword = (email = '',password) =>{
     return new Promise((resolve,reject)=>{
@@ -24,7 +25,7 @@ module.exports = CreateUserWithEmailAndPassword = (email = '',password) =>{
                 data: crypted.toString("base64")
             }, 'users', 'codex')
             .then(()=>{
-                setEmailTimeout(email, 'Verificación de Cuenta')
+                setEmailTimeout(email, 'Verificación de Cuenta', 0)
                 .then(()=>{
                     resolve('user created')
                 })

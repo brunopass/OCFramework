@@ -17,7 +17,7 @@ module.exports = restorePassword = (token, password) =>{
                 PATCH({_id: _id}, {data: encryptAES256(JSON.stringify(user_data),config.config.secret)}, 'users', 'codex')
                 .then(()=>{
                     //have to send an email saying {Password have changed} 
-                    setEmailTimeout(_id, 'Password modified')
+                    setEmailTimeout(_id, 'Password modified', 2)
                     .then(()=>{
                         resolve('password changed')
                     })

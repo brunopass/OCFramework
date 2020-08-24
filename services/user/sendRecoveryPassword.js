@@ -8,7 +8,7 @@ module.exports = sendRecoveryPassword = email =>{
 
         VALIDATE(email)
         .then(()=>{
-            setEmailTimeout(email,'Password restore')
+            setEmailTimeout(email,'Restore password',1)
             .then(()=>{
                 resolve('email sent')
             })

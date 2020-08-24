@@ -27,7 +27,7 @@ router.post('/signup', (req,res)=>{
     .catch(err => onError(res,err,400))
 })
 
-router.post('/recover/send', (req,res)=>{
+router.post('/recover', (req,res)=>{
     sendRecoveryPassword(
         req.body.email
     )

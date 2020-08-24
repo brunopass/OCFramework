@@ -1,7 +1,7 @@
 const SHA256 = require("../../libraries/security/sha256")
 const { POST, PATCH, GET } = require("../../libraries/database/mongodb")
 const { ulid } = require("ulid")
-const { decryptAES256, encryptAES256 } = require("../../libraries/security/aes256")
+const { encryptAES256 } = require("../../libraries/security/aes256")
 const config = require("../../config")
 const decryptUser = require("../security/decryptUser")
 
