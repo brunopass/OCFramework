@@ -1,7 +1,7 @@
 const verifyEmail = require("../email/verifyEmail");
-const { VALIDATE } = require("../../libraries/database/mongodb");
+const { Mongo } = require("../../libraries/database/mongodb");
 const SHA256 = require("../../libraries/security/sha256");
-const { serverEncrypt, serverDecrypt } = require("../../libraries/security/aes256");
+const { serverDecrypt } = require("../../libraries/security/aes256");
 const { signJWT } = require("../../libraries/security/jsonwebtoken");
 const config = require("../../config");
 
@@ -9,7 +9,8 @@ module.exports = SignInWithEmailAndPassword = (email,password) =>{
     return new Promise((resolve,reject)=>{
         if(!verifyEmail(email)) reject(new Error('Email invalido'));
         const passphrase = SHA256(password)
-        VALIDATE(email)
+        new Mongo( 'users', 'codex')
+        .VALIDATE(email)
         .then(user => {
             const data = serverDecrypt(JSON.stringify(user.data),config.config.secret)
             const userData = JSON.parse(data)

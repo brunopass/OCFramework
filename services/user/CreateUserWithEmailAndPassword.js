@@ -1,10 +1,10 @@
-const { POST } = require("../../libraries/database/mongodb")
 const SHA256 = require("../../libraries/security/sha256")
 const verifyEmail = require("../email/verifyEmail")
 const setEmailTimeout = require("../email/setEmailTimeout")
 const { serverEncrypt } = require("../../libraries/security/aes256")
 const config = require("../../config")
 const verifyEmailTemplate = require("../../libraries/smtp/templates/verifyEmailTemplate")
+const { Mongo } = require("../../libraries/database/mongodb")
 
 module.exports = CreateUserWithEmailAndPassword = (email = '',password) =>{
     return new Promise((resolve,reject)=>{
@@ -20,10 +20,11 @@ module.exports = CreateUserWithEmailAndPassword = (email = '',password) =>{
 
         try{
             const crypted = serverEncrypt(JSON.stringify(data),config.config.secret)
-            POST({
+            new Mongo('users', 'codex')
+            .POST({
                 _id: email,
                 data: crypted.toString("base64")
-            }, 'users', 'codex')
+            })
             .then(()=>{
                 setEmailTimeout(email, 'Verificación de Cuenta', 0)
                 .then(()=>{

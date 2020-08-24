@@ -1,5 +1,5 @@
 const SHA256 = require("../../libraries/security/sha256")
-const { POST, PATCH, GET } = require("../../libraries/database/mongodb")
+const { Mongo } = require("../../libraries/database/mongodb")
 const { ulid } = require("ulid")
 const { encryptAES256 } = require("../../libraries/security/aes256")
 const config = require("../../config")
@@ -15,18 +15,21 @@ module.exports = CreateWorkspace = (user_id,name,password) =>{
             data: [{}]
         }
         
-        POST({
+        new Mongo('workspace', 'codex')
+        .POST({
             _id: _id,
             name: name,
             data: encryptAES256(JSON.stringify(data), passphrase)
-        }, 'workspace', 'codex')
+        })
         .then(()=>{ 
-            GET({_id:user_id}, 'users', 'codex')
+            new Mongo('users', 'codex')
+            .GET({_id:user_id})
             .then(user =>{
                 const user_data = decryptUser(user[0])
                 user_data.workspace_id.push({name: name, id: _id})
                 
-                PATCH({_id: user_id}, {data: encryptAES256(JSON.stringify(user_data), config.config.secret)}, 'users', 'codex')
+                new Mongo('users', 'codex')
+                .PATCH({_id: user_id}, {data: encryptAES256(JSON.stringify(user_data), config.config.secret)})
                 .then(()=>{
                     resolve('workspace created')
                 })

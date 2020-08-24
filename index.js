@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser')
 const GET = require('./controllers/GET')
 const POST = require('./controllers/POST')
 const PATCH = require('./controllers/PATCH')
-const { DELETE } = require('./libraries/database/mongodb')
+const { Mongo } = require('./libraries/database/mongodb')
 const { config } = require('./config')
 const server = express()
 const PORT = config.port
@@ -20,7 +20,8 @@ server.use(POST)
 server.use(PATCH)
 
 const connection = server.listen(PORT,()=>{
-    DELETE({}, 'auth', 'codex')
+    new Mongo('auth', 'codex')
+    .DELETE({})
     .then(()=> console.log('auth reiniciado'))
     .catch(Err => console.error('no se pudo reiniciar el auth'))
     console.log(`running on http://localhost:${PORT}/`)
