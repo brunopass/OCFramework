@@ -1,4 +1,3 @@
-const dotenv = require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
@@ -11,19 +10,23 @@ const { config } = require('./config')
 const server = express()
 const PORT = config.port
 
-server.use(cors())
+server.use(cors({
+    origin: config.cors,
+    credentials: true
+}))
+
+server.use(cookieParser())
 server.use(bodyParser.json())
 server.use(bodyParser.urlencoded({extended: false}))
-server.use(cookieParser())
 server.use(GET)
 server.use(POST)
 server.use(PATCH)
 
 const connection = server.listen(PORT,()=>{
-    new Mongo('auth', 'codex')
+   new Mongo('auth', 'codex')
     .DELETE({})
     .then(()=> console.log('auth reiniciado'))
-    .catch(Err => console.error('no se pudo reiniciar el auth'))
+    .catch(err => console.error(err))
     console.log(`running on http://localhost:${PORT}/`)
 })
 

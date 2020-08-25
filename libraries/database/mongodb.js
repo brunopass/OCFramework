@@ -40,7 +40,7 @@ const PATCH = (__query,__path, __collection, __db, client) =>{
     return new Promise((resolve,reject)=>{
         client.connect(err=>{
             if(err) reject(new Error(err));
-            setDB(__db,__collection,client).findOneAndUpdate(__query,__path)
+            setDB(__db,__collection,client).updateOne(__query,{$set:__path})
             .then(()=>{
                 resolve('updated')
             })
@@ -68,7 +68,7 @@ const DELETE = (__query, __collection, __db,client) =>{
 
 const VALIDATE = (_id,__collection, __db ,client) =>{
     return new Promise((resolve,reject)=>{
-        client.connect(()=>{
+        client.connect(err=>{
             if(err) reject(new Error(err));
             setDB(__db,__collection,client)
             .findOne({_id: _id}).then(user => {

@@ -20,12 +20,13 @@ module.exports = CreateUserWithEmailAndPassword = (email = '',password) =>{
 
         try{
             const crypted = serverEncrypt(JSON.stringify(data),config.config.secret)
-            new Mongo('users', 'codex')
+            let connection = new Mongo('users', 'codex')
             .POST({
                 _id: email,
                 data: crypted.toString("base64")
             })
             .then(()=>{
+                connection = null
                 setEmailTimeout(email, 'Verificación de Cuenta', 0)
                 .then(()=>{
                     resolve('user created')
@@ -36,12 +37,13 @@ module.exports = CreateUserWithEmailAndPassword = (email = '',password) =>{
                 })
             })
             .catch(err => {
-                console.error("Error al crear user en db")
-                reject(new Error(err))
+                console.error(err)
+                reject(new Error("Error al crear usuario"))
             })
         }
-        catch(Err){
-            reject(new Error(Err))
+        catch(err){
+            console.error(err)
+            reject(new Error("error inesperado"))
         }
     })
 }

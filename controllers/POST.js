@@ -1,6 +1,6 @@
 const express = require('express')
 const SignInWithEmailAndPassword = require('../services/user/SignInWithEmailAndPassword')
-const { onSuccess, onError } = require('../services/network/Responses')
+const { onSuccess, onError, onCookie } = require('../services/network/Responses')
 const CreateUserWithEmailAndPassword = require('../services/user/CreateUserWithEmailAndPassword')
 const sendRecoveryPassword = require('../services/user/sendRecoveryPassword')
 const router = express.Router()
@@ -11,11 +11,12 @@ router.post('/signin', (req,res)=>{
         req.body.password
     )
     .then(jwt => {
-        onSuccess(res,jwt,200)
+        onCookie(res,'logged', 'token', jwt, {
+            maxAge: 86_400_000,
+            httpOnly:true
+        })
     })
-    .catch(err => {
-        onError(res,err,401)
-    })
+    .catch(err => onError(res,err,401))
 })
 
 router.post('/signup', (req,res)=>{

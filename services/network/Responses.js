@@ -3,7 +3,7 @@ const onSuccess = (res,data,status = 200) =>{
 }
 
 const onError = (res,error,status = 400) =>{
-    res.status(status).send(error)
+    res.status(status).send(error.message)
 }
 
 const onCookie = (res,data,name,value,options = {}) =>{

@@ -1,6 +1,9 @@
 const { decryptAES256 } = require("../../libraries/security/aes256")
+const {config} = require('../../config')
 
 module.exports = decryptUser = (user) =>{
+
+    console.log(user)
 
     class User{
         constructor(password, workspace_id, suscription,validated){
@@ -11,7 +14,7 @@ module.exports = decryptUser = (user) =>{
         }
     }
 
-        const data = decryptAES256(JSON.stringify(user.data), config.config.secret)
+        const data = decryptAES256(JSON.stringify(user.data), config.secret)
         const data_json = JSON.parse(data)
         let user_data = new User(
             data_json.password,
