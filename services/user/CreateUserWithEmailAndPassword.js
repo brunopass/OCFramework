@@ -3,7 +3,6 @@ const verifyEmail = require("../email/verifyEmail")
 const setEmailTimeout = require("../email/setEmailTimeout")
 const { serverEncrypt } = require("../../libraries/security/aes256")
 const config = require("../../config")
-const verifyEmailTemplate = require("../../libraries/smtp/templates/verifyEmailTemplate")
 const { Mongo } = require("../../libraries/database/mongodb")
 
 module.exports = CreateUserWithEmailAndPassword = (email = '',password) =>{

@@ -27,9 +27,9 @@ const sendEmail = (email,subject,file) =>{
           ]
         })
         .then(()=>{
-            resolve('ok')
+            resolve('email sent')
         })
-        .catch(()=>reject('error'))
+        .catch(()=>reject(new Error('cannot send')))
     })
 }
 

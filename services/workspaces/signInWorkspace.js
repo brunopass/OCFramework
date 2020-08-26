@@ -10,15 +10,15 @@ module.exports = signInWorkspace = (_id, password) =>{
         new Mongo('workspace', 'codex')
         .GET({_id: _id})
         .then(workspace => {
-            const data = decryptWorkspace(workspace[0], password)
-            data.catch(() => reject(new Error('cannot decrypt')))
-            data.then(workspaceDecrypted => {
+            decryptWorkspace(workspace[0], SHA256(password))
+            .then(workspaceDecrypted => {
                 if(workspaceDecrypted.password === SHA256(password)){
                     resolve(signJWT(encryptAES256(SHA256(password),config.secret)))
                 }else{
                     reject(new Error('cannot decrypt'))
                 }
             })
+            .catch(() => reject(new Error('cannot decrypt')))
         })
         .catch(err => {
             console.error(err)

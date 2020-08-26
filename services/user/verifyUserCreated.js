@@ -28,6 +28,7 @@ module.exports = verifyUserCreated = token =>{
     })
 }
 
+//TODO: 
 //having a promise hell, fix later
 const validateUser = _id =>{
     return new Promise((resolve,reject)=>{
