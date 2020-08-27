@@ -12,7 +12,8 @@ const PORT = config.port
 
 server.use(cors({
     origin: config.cors,
-    credentials: true
+    credentials: true,
+    allowedHeaders: 'Content-Type, *'
 }))
 
 server.use(cookieParser())

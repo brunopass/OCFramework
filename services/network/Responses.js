@@ -13,5 +13,5 @@ const onCookie = (res,data,name,value,options = {}) =>{
 module.exports = {
     onSuccess,
     onError,
-    onCookie
+    onCookie,
 }

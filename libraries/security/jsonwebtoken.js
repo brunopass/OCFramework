@@ -6,7 +6,11 @@ const signJWT = payload =>{
 }
 
 const verifyJWT = token =>{
-    return jsonwebtoken.verify(token, config.jwt)
+    try{
+        return jsonwebtoken.verify(token, config.jwt)
+    }catch{
+        return null
+    }
 }
 
 module.exports = {
