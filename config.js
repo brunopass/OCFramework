@@ -1,4 +1,4 @@
-const dotenv = require('dotenv')
+const dotenv = require('dotenv').config()
 
 const config = {
     port: process.env.PORT,
@@ -6,7 +6,8 @@ const config = {
     mongo_db: process.env.MONGO_DB_SECRET,
     jwt: process.env.SECRET,
     mailjetKey: process.env.MAILJET_KEY,
-    mailjetSecret: process.env.MAILJET_SECRET
+    mailjetSecret: process.env.MAILJET_SECRET,
+    cors: process.env.CORS
 }
 
 module.exports = {config}

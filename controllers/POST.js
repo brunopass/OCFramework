@@ -12,10 +12,9 @@ router.post('/signin', (req,res)=>{
         req.body.email,
         req.body.password
     )
-    .then(jwt => {
-        onCookie(res,'logged', 'token', jwt, {
-            maxAge: 86_400_000,
-            httpOnly:true,
+    .then(jwt=> {
+        onCookie(res,'user logged','token',jwt,{
+            httpOnly:true
         })
     })
     .catch(err => onError(res,err,401))
