@@ -4,11 +4,11 @@ const SHA256 = require("../../libraries/security/sha256")
 const verifyEmailTemplate = require("../../libraries/smtp/templates/verifyEmailTemplate")
 const restoreEmailTemplate = require("../../libraries/smtp/templates/restoreEmailTemplate")
 const passwordRestoredEmailTemplate = require("../../libraries/smtp/templates/passwordRestoredEmailTemplate")
+const twoFactorAuth = require('../../libraries/smtp/templates/2FA')
 const { Mongo } = require("../../libraries/database/mongodb")
 
-module.exports = setEmailTimeOut = (email, subject, file) =>{
+module.exports = setEmailTimeOut = (email, subject, file,accessCode="") =>{
     return new Promise((resolve,reject)=>{
-        
         const _id = SHA256(ulid())
         const url = "http://localhost:3000"
         let uri = ''
@@ -24,6 +24,9 @@ module.exports = setEmailTimeOut = (email, subject, file) =>{
             2: ()=>{
                 uri = `${url}/restore`
                 file = passwordRestoredEmailTemplate(uri)
+            },
+            3:()=>{
+                file = twoFactorAuth(accessCode)
             }
         }
 

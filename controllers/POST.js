@@ -1,10 +1,12 @@
 const express = require('express')
 const SignInWithEmailAndPassword = require('../services/user/SignInWithEmailAndPassword')
-const { onSuccess, onError, onCookie } = require('../services/network/Responses')
+const { onSuccess, onError, onCookie, onAuthCookie } = require('../services/network/Responses')
 const CreateUserWithEmailAndPassword = require('../services/user/CreateUserWithEmailAndPassword')
 const sendRecoveryPassword = require('../services/user/sendRecoveryPassword')
 const resendVerificationEmail = require('../services/user/resendVerificationEmail')
 const createIncogniteWithIdAndPassword = require('../services/incognite/createIncogniteWithIdAndPassword')
+const signInWithToken = require('../services/user/signInWithToken')
+const { verifyJWT } = require('../libraries/security/jsonwebtoken')
 const router = express.Router()
 
 router.post('/signin', (req,res)=>{
@@ -13,11 +15,25 @@ router.post('/signin', (req,res)=>{
         req.body.password
     )
     .then(jwt=> {
-        onCookie(res,'user logged','token',jwt,{
+        onCookie(res,'2fa sent','auth',jwt,{
             httpOnly:true
         })
     })
     .catch(err => onError(res,err,401))
+})
+
+router.post('/2fa', (req,res)=>{
+        signInWithToken(
+            req.body.auth,
+            req.body.code
+        )
+        .then(jwt => {
+            onAuthCookie(res,'user logged', 'token', jwt,{
+                httpOnly:true
+            })
+        })
+        .catch(err => onError(res,err,401))
+
 })
 
 router.post('/signup', (req,res)=>{

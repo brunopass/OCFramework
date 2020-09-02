@@ -6,11 +6,15 @@ const signJWT = payload =>{
 }
 
 const verifyJWT = token =>{
-    try{
-        return jsonwebtoken.verify(token, config.jwt)
-    }catch{
-        return null
-    }
+    return new Promise((resolve,reject)=>{
+        try{
+            let verify = jsonwebtoken.verify(token, config.jwt)
+            resolve(verify)
+        }catch(err){
+            console.error(err)
+            reject(new Error("invalid cookie"))
+        }
+    })
 }
 
 module.exports = {

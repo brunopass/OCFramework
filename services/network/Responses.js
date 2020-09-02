@@ -10,8 +10,16 @@ const onCookie = (res,data,name,value,options = {}) =>{
     res.cookie(name,value,options).send(data)
 }
 
+const onAuthCookie = (res,data,name,value,options = {}) =>{
+    res.cookie("auth","",{
+        expires: "Thu, 01 Jan 1970 00:00:00 UTC"
+    })
+    res.cookie(name,value,options).send(data)
+}
+
 module.exports = {
     onSuccess,
     onError,
     onCookie,
+    onAuthCookie
 }

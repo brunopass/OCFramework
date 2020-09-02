@@ -4,6 +4,7 @@ const SHA256 = require("../../libraries/security/sha256");
 const { decryptAES256 } = require("../../libraries/security/aes256");
 const { signJWT } = require("../../libraries/security/jsonwebtoken");
 const config = require("../../config");
+const sendAuthVerification = require("./sendAuthVerification");
 
 module.exports = SignInWithEmailAndPassword = (email,password) =>{
     return new Promise((resolve,reject)=>{
@@ -19,7 +20,7 @@ module.exports = SignInWithEmailAndPassword = (email,password) =>{
             const userData = JSON.parse(data)
             if(userData.password == passphrase){
                 if(userData.validated){
-                    const jwt = signJWT({sub: email})
+                    const jwt = sendAuthVerification(email)
                     resolve(jwt)
                 }else{
                     console.log('user not validated')
