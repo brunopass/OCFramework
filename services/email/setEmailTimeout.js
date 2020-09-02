@@ -10,16 +10,20 @@ module.exports = setEmailTimeOut = (email, subject, file) =>{
     return new Promise((resolve,reject)=>{
         
         const _id = SHA256(ulid())
-        const url = ''
+        const url = "http://localhost:3000"
+        let uri = ''
         const templates = {
             0: ()=>{
-                file = verifyEmailTemplate(url)
+                uri = `${url}/verify/${_id}`
+                file = verifyEmailTemplate(uri)
             },
             1: ()=>{
-                file = restoreEmailTemplate(url)
+                uri = `${url}/restore/${_id}`
+                file = restoreEmailTemplate(uri)
             },
             2: ()=>{
-                file = passwordRestoredEmailTemplate(url)
+                uri = `${url}/restore`
+                file = passwordRestoredEmailTemplate(uri)
             }
         }
 

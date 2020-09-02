@@ -7,9 +7,14 @@ const { Mongo } = require("../../libraries/database/mongodb")
 
 module.exports = CreateUserWithEmailAndPassword = (email = '',password) =>{
     return new Promise((resolve,reject)=>{
-        if(!verifyEmail(email)) {reject(new Error('email not valid'))}
-        const passphrase = SHA256(password)
+        if(!verifyEmail(email)) {
+            console.log('denied')
+            reject(new Error('email not valid'))
+        }
+        else{
 
+        
+        const passphrase = SHA256(password)
         const data = {
             password: passphrase,
             workspace_id: [{}],
@@ -43,6 +48,7 @@ module.exports = CreateUserWithEmailAndPassword = (email = '',password) =>{
         catch(err){
             console.error(err)
             reject(new Error("error inesperado"))
+        }
         }
     })
 }

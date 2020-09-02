@@ -16,7 +16,6 @@ router.get('/incognite/id', (req,res)=>{
 router.get('/', (req,res)=>{
     const jwt = req.cookies.token;
     const token = verifyJWT(jwt)
-    console.log(token.sub)
 })
 
 module.exports = router

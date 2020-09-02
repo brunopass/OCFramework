@@ -7,7 +7,10 @@ const config = require("../../config");
 
 module.exports = SignInWithEmailAndPassword = (email,password) =>{
     return new Promise((resolve,reject)=>{
-        if(!verifyEmail(email)) reject(new Error('Email invalido'));
+        if(!verifyEmail(email)){
+            console.log('denied')
+            reject(new Error('Email invalido'));
+        } else{
         const passphrase = SHA256(password)
         new Mongo( 'users', 'codex')
         .VALIDATE(email)
@@ -30,5 +33,6 @@ module.exports = SignInWithEmailAndPassword = (email,password) =>{
         .catch(err =>{
             reject(new Error('credentials not found'))
         })
+    }
     })
 }

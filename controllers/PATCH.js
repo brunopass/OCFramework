@@ -15,7 +15,7 @@ router.patch('/recover', (req,res)=>{
 
 router.patch('/verify', (req,res)=>{
     verifyUserCreated(
-        req.body.token
+        req.body.auth
     )
     .then(ok => onSuccess(res,ok,200))
     .catch(err => onError(res,err,400)) //error may change(? can be forbidden
