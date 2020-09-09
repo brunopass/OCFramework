@@ -1,6 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
+const helmet = require('helmet')
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const GET = require('./controllers/GET')
@@ -34,6 +35,7 @@ server.use((req, res, next) => {
     next();
 });
 
+server.use(helmet())
 server.use(bodyParser.json())
 server.use(bodyParser.urlencoded({extended: false}))
 server.use(GET)
