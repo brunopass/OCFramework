@@ -2,13 +2,12 @@ const express = require('express')
 const restorePassword = require('../services/user/restorePassword')
 const { onSuccess, onError } = require('../services/network/Responses')
 const verifyUserCreated = require('../services/user/verifyUserCreated')
+const { User, Auth} = require('../services/user/User')
 const router = express.Router()
 
 router.patch('/recover', (req,res)=>{
-    restorePassword(
-        req.body.token,
-        req.body.password
-    )
+    new Auth(req.body.password,req.body.token)
+    .RestorePassword()
     .then(ok => onSuccess(res,ok,201))
     .catch(err => onError(res,err,403))
 })

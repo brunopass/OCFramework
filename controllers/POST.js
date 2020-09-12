@@ -1,19 +1,12 @@
 const express = require('express')
-const SignInWithEmailAndPassword = require('../services/user/SignInWithEmailAndPassword')
 const { onSuccess, onError, onCookie, onAuthCookie } = require('../services/network/Responses')
-const CreateUserWithEmailAndPassword = require('../services/user/CreateUserWithEmailAndPassword')
-const sendRecoveryPassword = require('../services/user/sendRecoveryPassword')
-const resendVerificationEmail = require('../services/user/resendVerificationEmail')
 const createIncogniteWithIdAndPassword = require('../services/incognite/createIncogniteWithIdAndPassword')
-const signInWithToken = require('../services/user/signInWithToken')
-const { verifyJWT } = require('../libraries/security/jsonwebtoken')
+const { User, Auth }= require('../services/user/User')
 const router = express.Router()
 
 router.post('/signin', (req,res)=>{
-    SignInWithEmailAndPassword(
-        req.body.email,
-        req.body.password
-    )
+    new User(req.body.email,req.body.password)
+    .SignIn()
     .then(jwt=> {
         onCookie(res,'2fa sent','auth',jwt,{
             httpOnly:true
@@ -23,10 +16,8 @@ router.post('/signin', (req,res)=>{
 })
 
 router.post('/2fa', (req,res)=>{
-        signInWithToken(
-            req.body.auth,
-            req.body.code
-        )
+    new Auth(undefined,req.body.auth)
+    .SignInWithToken(req.body.code)
         .then(jwt => {
             onAuthCookie(res,'user logged', 'token', jwt,{
                 httpOnly:true
@@ -37,24 +28,22 @@ router.post('/2fa', (req,res)=>{
 })
 
 router.post('/signup', (req,res)=>{
-    CreateUserWithEmailAndPassword(
-        req.body.email,
-        req.body.password
-    )
+    new User(req.body.email,req.body.password)
+    .CreateUser()
     .then(ok => onSuccess(res,ok,201))
     .catch(err => onError(res,err,400))
 })
 
 router.post('/resend', (req,res)=>{
-    resendVerificationEmail(req.body.email)
+    new User(req.body.email)
+    .ResendVerificationEmail()
     .then(ok => onSuccess(res,ok,200))
     .catch(err => onError(res,err,400))
 })
 
 router.post('/recover', (req,res)=>{
-    sendRecoveryPassword(
-        req.body.email
-    )
+    new User(req.body.email)
+    .SendRecoveryPassword()
     .then(ok => onSuccess(res,ok,200))
     .catch(err => onError(res,err,400))
 })
